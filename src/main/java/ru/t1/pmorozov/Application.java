@@ -2,7 +2,6 @@ package ru.t1.pmorozov;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
-import ru.t1.pmorozov.config.AppConfig;
 import ru.t1.pmorozov.data.User;
 import ru.t1.pmorozov.service.UserService;
 
