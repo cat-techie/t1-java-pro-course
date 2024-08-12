@@ -16,12 +16,12 @@ public class UserService {
         this.userDao = userDao;
     }
 
-    public Set<User> readAll() {
-        return userDao.readAll();
+    public Set<User> getAll() {
+        return userDao.getAll();
     }
 
-    public Optional<User> findById(Long id) {
-        return userDao.readById(id);
+    public Optional<User> get(Long id) {
+        return userDao.get(id);
     }
 
     public void insert(User user) {

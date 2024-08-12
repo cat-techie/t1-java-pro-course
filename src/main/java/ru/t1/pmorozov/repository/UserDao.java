@@ -2,7 +2,6 @@ package ru.t1.pmorozov.repository;
 
 import org.springframework.stereotype.Repository;
 import ru.t1.pmorozov.data.User;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -13,7 +12,7 @@ import java.util.Set;
 import static ru.t1.pmorozov.repository.Queries.*;
 
 @Repository
-public class UserDao {
+public class UserDao implements Dao<User> {
 
     private final Connection connection;
 
@@ -34,6 +33,7 @@ public class UserDao {
         }
     }
 
+    @Override
     public void delete(User user) {
         try (var statement = connection.prepareStatement(DELETE_USER)) {
             statement.setLong(1, user.getId());
@@ -43,6 +43,7 @@ public class UserDao {
         }
     }
 
+    @Override
     public void deleteAll() {
         try (var statement = connection.prepareStatement(DELETE_ALL_USERS)) {
             statement.execute();
@@ -51,6 +52,7 @@ public class UserDao {
         }
     }
 
+    @Override
     public void update(User user) {
         try (var statement = connection.prepareStatement(UPDATE_USER)) {
             statement.setString(1, user.getUserName());
@@ -61,7 +63,8 @@ public class UserDao {
         }
     }
 
-    public Optional<User> readById(Long id) {
+    @Override
+    public Optional<User> get(long id) {
         try (var statement = connection.prepareStatement(FIND_USER_BY_ID)) {
             statement.setLong(1, id);
             var resultSet = statement.executeQuery();
@@ -77,7 +80,8 @@ public class UserDao {
         }
     }
 
-    public Set<User> readAll() {
+    @Override
+    public Set<User> getAll() {
         Set<User> result = new HashSet<>();
         try (var statement = connection.prepareStatement(SELECT_ALL_USERS);
              var resultSet = statement.executeQuery()) {
