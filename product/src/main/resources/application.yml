@@ -1,0 +1,8 @@
+server:
+  port: 8181
+
+jdbc:
+  driver-class-name: org.postgresql.Driver
+  url: "jdbc:postgresql://localhost:5432/postgres"
+  username: pmorozov
+  password: password
