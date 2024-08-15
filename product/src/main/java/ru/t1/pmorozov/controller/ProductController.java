@@ -28,7 +28,7 @@ public class ProductController {
 
     @GetMapping("/getByProductId/{productId}")
     public ProductDto productById(@PathVariable Long productId) {
-        Product product = productService.get(productId).orElseThrow();
+        Product product = productService.findById(productId).orElseThrow();
         return new ProductDto(
                 product.getId(),
                 product.getAccNumber(),

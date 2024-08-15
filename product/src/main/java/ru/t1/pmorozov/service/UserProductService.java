@@ -9,12 +9,15 @@ import ru.t1.pmorozov.entity.Product;
 import ru.t1.pmorozov.entity.UserProduct;
 import ru.t1.pmorozov.exceptions.PaymentRespException;
 import ru.t1.pmorozov.exceptions.ProductRespException;
+import ru.t1.pmorozov.exceptions.RepoException;
 import ru.t1.pmorozov.repository.ProductRepo;
 import ru.t1.pmorozov.repository.UserProductRepo;
 
 import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+
 
 @Service
 public class UserProductService {
@@ -26,20 +29,16 @@ public class UserProductService {
         this.productRepo = productRepo;
     }
 
-    public Set<UserProduct> getAll() {
-        return userProductRepo.getAll();
+    public Set<UserProduct> findAll() {
+        return userProductRepo.findAll();
     }
 
-    public Optional<UserProduct> get(Long id) {
-        return userProductRepo.get(id);
+    public Optional<UserProduct> findById(Long id) {
+        return userProductRepo.findById(id);
     }
 
-    public void insert(UserProduct userProduct) {
-        userProductRepo.insert(userProduct);
-    }
-
-    public void update(UserProduct userProduct) {
-        userProductRepo.update(userProduct);
+    public void save(UserProduct userProduct) {
+        userProductRepo.save(userProduct);
     }
 
     public void delete(UserProduct userProduct) {
@@ -51,7 +50,11 @@ public class UserProductService {
     }
 
     public Set<ProductDto> getProductsByUserId(long userId) {
-        return ProductDto.getSetProductDto(userProductRepo.getProductsByUserId(userId));
+        Set<Product> products = userProductRepo.findByUserId(userId).stream().map(p -> productRepo.findById(p.getProductId()).orElseThrow()).collect(Collectors.toSet());
+        if (products.isEmpty()) {
+            throw new RepoException("Failed to get products by user_id " + userId);
+        }
+        return ProductDto.getSetProductDto(products);
     }
 
     public PaymentRespDto doPayment(PaymentReqDto payReqDto) {
@@ -59,7 +62,7 @@ public class UserProductService {
         Long productId = payReqDto.getProductId();
         BigDecimal sum = payReqDto.getSum();
 
-        Product product = productRepo.get(productId).orElseThrow();
+        Product product = productRepo.findById(productId).orElseThrow();
 
         if (getProductsByUserId(userId).stream().noneMatch(p -> p.getId().equals(productId))) {
             throw new ProductRespException(String.format("The product %s does not belong to the user %s", productId, userId), HttpStatus.BAD_REQUEST);
@@ -73,7 +76,7 @@ public class UserProductService {
         BigDecimal oldRest = product.getBalance();
         BigDecimal newRest = balance.subtract(sum);
         product.setBalance(newRest);
-        productRepo.update(product);
+        productRepo.save(product);
 
         return new PaymentRespDto(userId, productId, sum, oldRest, newRest);
     }

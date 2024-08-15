@@ -1,24 +1,29 @@
 package ru.t1.pmorozov.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
+@Entity
+@Table(name = "products")
 public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+    @Column(name = "account_number")
     private String accNumber;
+    @Column(name = "balance")
     private BigDecimal balance;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "product_type")
     private ProductType prodType;
 
-    public Product(Long id, String accNumber, BigDecimal balance, ProductType prodType) {
-        this.id = id;
-        this.accNumber = accNumber;
-        this.balance = balance;
-        this.prodType = prodType;
-    }
-
+    @OneToOne
+    @JoinColumn(name = "id", referencedColumnName = "product_id", nullable = false)
+    private UserProduct userProduct;
 }

@@ -16,20 +16,16 @@ public class UserService {
         this.userRepo = userRepo;
     }
 
-    public Set<User> getAll() {
-        return userRepo.getAll();
+    public Set<User> findAll() {
+        return userRepo.findAll();
     }
 
-    public Optional<User> get(Long id) {
-        return userRepo.get(id);
+    public Optional<User> findById(Long id) {
+        return userRepo.findById(id);
     }
 
-    public void insert(User user) {
-        userRepo.insert(user);
-    }
-
-    public void update(User user) {
-        userRepo.update(user);
+    public void save(User user) {
+        userRepo.save(user);
     }
 
     public void delete(User user) {

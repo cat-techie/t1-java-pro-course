@@ -1,16 +1,18 @@
 package ru.t1.pmorozov.entity;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 
-@Data
-@NoArgsConstructor
+@Getter
+@Setter
+@Entity
+@Table(name = "users_products")
 public class UserProduct {
+    @Id
+    @Column(name = "product_id")
     private Long productId;
-    private Long userId;
 
-    public UserProduct(Long productId, Long userId) {
-        this.productId = productId;
-        this.userId = userId;
-    }
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+    private User user;
 }

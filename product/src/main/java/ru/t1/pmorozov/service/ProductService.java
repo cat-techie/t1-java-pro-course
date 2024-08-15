@@ -1,12 +1,9 @@
 package ru.t1.pmorozov.service;
 
 import org.springframework.stereotype.Service;
-import ru.t1.pmorozov.dto.PaymentReqDto;
-import ru.t1.pmorozov.dto.PaymentRespDto;
 import ru.t1.pmorozov.entity.Product;
 import ru.t1.pmorozov.repository.ProductRepo;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.Set;
 
@@ -18,20 +15,16 @@ public class ProductService {
         this.productRepo = productRepo;
     }
 
-    public Set<Product> getAll() {
-        return productRepo.getAll();
+    public Set<Product> findAll() {
+        return productRepo.findAll();
     }
 
-    public Optional<Product> get(Long id) {
-        return productRepo.get(id);
+    public Optional<Product> findById(Long id) {
+        return productRepo.findById(id);
     }
 
-    public void insert(Product Product) {
-        productRepo.insert(Product);
-    }
-
-    public void update(Product Product) {
-        productRepo.update(Product);
+    public void save(Product product) {
+        productRepo.save(product);
     }
 
     public void delete(Product Product) {
