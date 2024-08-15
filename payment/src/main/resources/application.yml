@@ -1,0 +1,7 @@
+server:
+  port: 8282
+
+products-ms:
+  url: "http://localhost:8181/api/v1/products"
+  connect-timeout: 5s
+  read-timeout: 30s
